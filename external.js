@@ -21,7 +21,6 @@ const compare = (player, computer) => {
 };
 
 const playRound = () => {
-  const playerSelection = 'rock';
   let num = 0;
   let rounds = 5;
   const competitors = {
@@ -30,7 +29,7 @@ const playRound = () => {
   };
 
   while (rounds || (!num && rounds)) {
-    num = compare(playerSelection, getComputerChoice());
+    num = compare(prompt('Enter your choice'), getComputerChoice());
 
     if (num) {
       competitors[num]++;
