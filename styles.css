@@ -1,0 +1,12 @@
+body {
+  background-color: black;
+  text-align: center;
+  color: white;
+}
+
+.buttons {
+  margin: 0 auto;
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+}

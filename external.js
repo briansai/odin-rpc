@@ -10,7 +10,7 @@ const runGame = () => {
   const getPlayerChoice = (e) => {
     const option = e.target.textContent.toLowerCase();
     num = compare(option, getComputerChoice());
-    console.log(num);
+
     if (num) {
       competitors[num]++;
       rounds--;
