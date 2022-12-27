@@ -2,12 +2,17 @@ let num = 0;
 let rounds = 5;
 let winner = null;
 let option = null;
+let setReplay = false;
 const competitors = {
   1: 0,
   2: 0,
 };
 
 const getPlayerChoice = (e) => {
+  if (!e) {
+    return;
+  }
+
   option = e.target.classList[1];
   num = compare(option, getComputerChoice());
   console.log(e);
@@ -24,11 +29,17 @@ const getPlayerChoice = (e) => {
 
     winner = 2;
   }
-  // btn disabled, but its children are still clickable
-  if (winner) {
-    document.querySelector('.header').textContent = `Player ${winner} wins!`;
-    document.querySelectorAll('button').forEach((btn) => (btn.disabled = true));
-    console.log(winner);
+
+  if (winner && !setReplay) {
+    let header = document.querySelector('.header');
+    let replay = document.createElement('h2');
+    replay.textContent = 'Do you want to play again?';
+    header.textContent = `Player ${winner} wins!`;
+    document.querySelector('.header-container').append(replay);
+
+    document.querySelector('.buttons').remove();
+
+    setReplay = true;
     return winner;
   }
 };
