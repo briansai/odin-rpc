@@ -15,7 +15,7 @@ const getPlayerChoice = (e) => {
 
   option = e.target.classList[1];
   num = compare(option, getComputerChoice());
-  console.log(e);
+
   if (num) {
     competitors[num]++;
     rounds--;
@@ -24,10 +24,10 @@ const getPlayerChoice = (e) => {
 
   if (rounds === 0) {
     if (competitors[1] > competitors[2]) {
-      winner = 1;
+      return (winner = 1);
     }
 
-    winner = 2;
+    return (winner = 2);
   }
 
   if (winner) {
@@ -45,6 +45,7 @@ const getPlayerChoice = (e) => {
 
     let replayOptionYes = document.createElement('button');
     replayOptionYes.textContent = 'Yes';
+    replayOptionYes.style.fontSize = 'x-large';
     replayOptionYes.addEventListener('click', () => {
       replayOptionClicked = true;
       window.location.reload();
@@ -52,10 +53,15 @@ const getPlayerChoice = (e) => {
 
     let replayOptionNo = document.createElement('button');
     replayOptionNo.textContent = 'No';
+    replayOptionNo.style.fontSize = 'x-large';
     replayOptionNo.addEventListener('click', () => {
       replayOptionClicked = true;
       // create something here when click is no.
     });
+
+    document
+      .querySelectorAll('.btn')
+      .forEach((btn) => btn.removeEventListener('click', getPlayerChoice));
 
     if (!replayOptionClicked) {
       replayContainer.append(replay);
@@ -69,19 +75,16 @@ const getPlayerChoice = (e) => {
     return winner;
   }
 };
-const options = [
-  { text: 'rock', sign: '✊' },
-  { text: 'paper', sign: '✋' },
-  { text: 'scissor', sign: '✌' },
-];
+
+const options = ['rock', 'paper', 'scissors'];
 
 document
   .querySelectorAll('.btn')
-  .forEach(() => addEventListener('click', getPlayerChoice));
+  .forEach((btn) => btn.addEventListener('click', getPlayerChoice));
 
 const getRandomInt = () => Math.floor(Math.random() * 3);
 
-const getComputerChoice = () => options[getRandomInt()].text;
+const getComputerChoice = () => options[getRandomInt()];
 
 const compare = (player, computer) => {
   const winner = {
@@ -89,8 +92,7 @@ const compare = (player, computer) => {
     paper: 'rock',
     scissor: 'paper',
   };
-  console.log('player-->', player);
-  console.log('computer---->', computer);
+
   if (winner[player] === computer) {
     return 1;
   } else if (winner[computer] === player) {
