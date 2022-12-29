@@ -59,9 +59,11 @@ const getPlayerChoice = (e) => {
       // create something here when click is no.
     });
 
-    document
-      .querySelectorAll('.btn')
-      .forEach((btn) => btn.removeEventListener('click', getPlayerChoice));
+    document.querySelectorAll('.btn').forEach((btn) =>
+      btn.removeEventListener('click', () => {
+        console.log('Removed event listeners');
+      })
+    );
 
     if (!replayOptionClicked) {
       replayContainer.append(replay);
