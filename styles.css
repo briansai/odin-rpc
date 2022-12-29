@@ -4,6 +4,18 @@ body {
   color: white;
 }
 
+.hand.player {
+  font-size: 200px;
+  transform: scaleX(-1) rotate(-90deg);
+  animation: rotatePlayer 2s linear;
+}
+
+.hand.computer {
+  font-size: 200px;
+  transform: rotate(-90deg);
+  animation: rotateComp 2s linear;
+}
+
 button {
   width: 200px;
   height: 200px;
@@ -27,4 +39,52 @@ button:hover {
   width: 60%;
   display: flex;
   justify-content: space-between;
+}
+
+@keyframes rotatePlayer {
+  0% {
+    transform: scaleX(-1) rotate(-90deg);
+  }
+  16% {
+    transform: scaleX(-1) rotate(0deg);
+  }
+  32% {
+    transform: scaleX(-1) rotate(-90deg);
+  }
+  48% {
+    transform: scaleX(-1) rotate(0deg);
+  }
+  64% {
+    transform: scaleX(-1) rotate(-90deg);
+  }
+  80% {
+    transform: scaleX(-1) rotate(0deg);
+  }
+  100% {
+    transform: scaleX(-1) rotate(-90deg);
+  }
+}
+
+@keyframes rotateComp {
+  0% {
+    transform: rotate(-90deg);
+  }
+  16% {
+    transform: rotate(0deg);
+  }
+  32% {
+    transform: rotate(-90deg);
+  }
+  48% {
+    transform: rotate(0deg);
+  }
+  64% {
+    transform: rotate(-90deg);
+  }
+  80% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-90deg);
+  }
 }
