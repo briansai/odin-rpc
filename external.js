@@ -3,18 +3,55 @@ let rounds = 5;
 let winner = null;
 let option = null;
 let replayOptionClicked = false;
+
+const opts = {
+  rock: { text: 'scissor', sign: '✊' },
+  paper: { text: 'rock', sign: '✋' },
+  scissor: { text: 'paper', sign: '✌' },
+};
+
+const headContParent = document.querySelector('.header-container').parentNode;
+const buttons = document.querySelector('.buttons');
+
 const competitors = {
   1: 0,
   2: 0,
 };
 
-const getPlayerChoice = (e) => {
+const getChoices = (e) => {
   if (!e) {
     return;
   }
 
+  const getCompChoice = options[getRandomInt()];
+
   option = e.target.classList[1];
-  num = compare(option, getComputerChoice());
+  num = compare(option, getCompChoice);
+
+  animateHands();
+
+  setTimeout(() => {
+    const playerRock = option === 'rock' && 'rock';
+    const compRock = getCompChoice === 'rock' && 'rock';
+    const hands = document.querySelector('.hands');
+    hands.remove();
+
+    const divHandsFinal = document.createElement('div');
+    divHandsFinal.className = 'hands';
+
+    const playerChoice = document.createElement('div');
+    playerChoice.className = `hand player ${playerRock}`;
+    playerChoice.textContent = `${opts[option].sign}`;
+
+    const compChoice = document.createElement('div');
+    compChoice.className = `hand computer ${compRock}`;
+    compChoice.textContent = `${opts[getCompChoice].sign}`;
+
+    divHandsFinal.append(playerChoice);
+    divHandsFinal.append(compChoice);
+
+    headContParent.insertBefore(divHandsFinal, buttons);
+  }, 2000);
 
   if (num) {
     competitors[num]++;
@@ -78,28 +115,52 @@ const getPlayerChoice = (e) => {
   }
 };
 
-const options = ['rock', 'paper', 'scissors'];
+const options = ['rock', 'paper', 'scissor'];
 
 document
   .querySelectorAll('.btn')
-  .forEach((btn) => btn.addEventListener('click', getPlayerChoice));
+  .forEach((btn) => btn.addEventListener('click', getChoices));
 
 const getRandomInt = () => Math.floor(Math.random() * 3);
 
-const getComputerChoice = () => options[getRandomInt()];
-
-const compare = (player, computer) => {
-  const winner = {
-    rock: 'scissor',
-    paper: 'rock',
-    scissor: 'paper',
-  };
-
-  if (winner[player] === computer) {
-    return 1;
-  } else if (winner[computer] === player) {
-    return 2;
+const compare = (player, computerChoice) => {
+  const computer = computerChoice;
+  console.log('computer-->', computer);
+  console.log('text-->', opts[computer]);
+  if (opts && opts[player].text) {
+    if (opts[player].text === computer) {
+      return 1;
+    } else if (opts[computer].text === player) {
+      return 2;
+    }
   }
 
   return 0;
+};
+
+const generateHands = (animate) => {
+  const animation = animate && 'animate rock';
+
+  const handsInit = document.querySelector('.hands');
+  handsInit.remove();
+
+  const divHands = document.createElement('div');
+  divHands.className = 'hands';
+
+  const player = document.createElement('div');
+  player.className = `hand player ${animation}`;
+  player.textContent = '✊';
+
+  const comp = document.createElement('div');
+  comp.className = `hand computer ${animation}`;
+  comp.textContent = '✊';
+
+  divHands.append(player);
+  divHands.append(comp);
+
+  headContParent.insertBefore(divHands, buttons);
+};
+
+const animateHands = () => {
+  generateHands(true);
 };

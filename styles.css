@@ -4,16 +4,36 @@ body {
   color: white;
 }
 
-.hand.player {
+.hands {
   font-size: 200px;
+  margin: 0 auto;
+  height: 250px;
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hand.player {
+  position: absolute;
   transform: scaleX(-1) rotate(-90deg);
+}
+
+.hand.player.animate {
   animation: rotatePlayer 2s linear;
 }
 
 .hand.computer {
-  font-size: 200px;
+  position: absolute;
+  right: 30%;
   transform: rotate(-90deg);
+}
+
+.hand.computer.animate {
   animation: rotateComp 2s linear;
+}
+
+.rock {
+  font-size: 180px;
 }
 
 button {
