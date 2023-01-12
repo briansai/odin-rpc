@@ -1,21 +1,25 @@
-let num = 0;
+let competitor = '';
 let rounds = 5;
 let winner = null;
 let option = null;
 let replayOptionClicked = false;
 
 const opts = {
-  rock: { text: 'scissor', sign: '✊' },
-  paper: { text: 'rock', sign: '✋' },
-  scissor: { text: 'paper', sign: '✌' },
+  rock: { text: 'rock', beats: 'scissor', sign: '✊' },
+  paper: { text: 'paper', beats: 'rock', sign: '✋' },
+  scissor: { text: 'scissor', beats: 'paper', sign: '✌' },
 };
 
 const headContParent = document.querySelector('.header-container').parentNode;
 const buttons = document.querySelector('.buttons');
 
 const competitors = {
-  1: 0,
-  2: 0,
+  player: {
+    point: 0,
+  },
+  computer: {
+    point: 0,
+  },
 };
 
 const getChoices = (e) => {
@@ -26,13 +30,13 @@ const getChoices = (e) => {
   const getCompChoice = options[getRandomInt()];
 
   option = e.target.classList[1];
-  num = compare(option, getCompChoice);
+  competitor = compare(option, getCompChoice);
 
   animateHands();
 
   setTimeout(() => {
-    const playerRock = option === 'rock' && 'rock';
-    const compRock = getCompChoice === 'rock' && 'rock';
+    const playerRock = option;
+    const compRock = getCompChoice;
     const hands = document.querySelector('.hands');
     hands.remove();
 
@@ -53,66 +57,90 @@ const getChoices = (e) => {
     headContParent.insertBefore(divHandsFinal, buttons);
   }, 2000);
 
-  if (num) {
-    competitors[num]++;
-    rounds--;
-    num = 0;
-  }
+  setTimeout(
+    () => {
+      if (competitor) {
+        competitors[competitor].point++;
 
-  if (rounds === 0) {
-    if (competitors[1] > competitors[2]) {
-      return (winner = 1);
-    }
+        const point = document.querySelector(`.${competitor}-point`);
+        const pointClass = point.className;
+        point.remove();
 
-    return (winner = 2);
-  }
+        const newPoint = document.createElement('span');
+        newPoint.className = pointClass;
+        newPoint.textContent = competitors[competitor].point;
 
-  if (winner) {
-    let headerContainer = document.querySelector('.header-container');
-    let buttons = document.querySelector('.buttons');
+        const pointContainer = document.querySelector(`.points-${competitor}`);
+        pointContainer.append(newPoint);
 
-    let replayContainer = document.createElement('div');
-    replayContainer.className = 'replay-container';
+        rounds--;
+        competitor = 0;
 
-    let header = document.querySelector('.header');
-    header.textContent = `Player ${winner} wins!`;
+        if (rounds === 1) {
+          if (competitors[1] > competitors[2]) {
+            return (winner = 1);
+          }
 
-    let replay = document.createElement('h2');
-    replay.textContent = 'Do you want to play again?';
+          return (winner = 2);
+        }
 
-    let replayOptionYes = document.createElement('button');
-    replayOptionYes.textContent = 'Yes';
-    replayOptionYes.style.fontSize = 'x-large';
-    replayOptionYes.addEventListener('click', () => {
-      replayOptionClicked = true;
-      window.location.reload();
-    });
+        if (winner) {
+          let headerContainer = document.querySelector('.header-container');
+          let buttons = document.querySelector('.buttons');
 
-    let replayOptionNo = document.createElement('button');
-    replayOptionNo.textContent = 'No';
-    replayOptionNo.style.fontSize = 'x-large';
-    replayOptionNo.addEventListener('click', () => {
-      replayOptionClicked = true;
-      // create something here when click is no.
-    });
+          let replayContainer = document.createElement('div');
+          replayContainer.className = 'replay-container';
 
-    document.querySelectorAll('.btn').forEach((btn) =>
-      btn.removeEventListener('click', () => {
-        console.log('Removed event listeners');
-      })
-    );
+          let header = document.querySelector('.header');
+          header.textContent = `Player ${winner} wins!`;
 
-    if (!replayOptionClicked) {
-      replayContainer.append(replay);
-      replayContainer.append(replayOptionYes);
-      replayContainer.append(replayOptionNo);
-      headerContainer.append(replayContainer);
-    }
+          let replay = document.createElement('h2');
+          replay.textContent = 'Do you want to play again?';
 
-    buttons && buttons.remove();
+          let replayOptionYes = document.createElement('button');
+          replayOptionYes.textContent = 'Yes';
+          replayOptionYes.style.fontSize = 'x-large';
+          replayOptionYes.addEventListener('click', () => {
+            replayOptionClicked = true;
+            window.location.reload();
+          });
 
-    return winner;
-  }
+          let replayOptionNo = document.createElement('button');
+          replayOptionNo.textContent = 'No';
+          replayOptionNo.style.fontSize = 'x-large';
+          replayOptionNo.addEventListener('click', () => {
+            replayOptionClicked = true;
+            // create something here when click is no.
+          });
+
+          document.querySelectorAll('.btn').forEach((btn) =>
+            btn.removeEventListener('click', () => {
+              console.log('Removed event listeners');
+            })
+          );
+
+          if (!replayOptionClicked) {
+            replayContainer.append(replay);
+            replayContainer.append(replayOptionYes);
+            replayContainer.append(replayOptionNo);
+            headerContainer.append(replayContainer);
+          }
+
+          const hands = document.querySelector('.hands');
+          hands.remove();
+
+          const points = document.querySelector('.points');
+          points.remove();
+
+          buttons && buttons.remove();
+
+          return winner;
+        }
+      }
+    },
+    2200,
+    competitor
+  );
 };
 
 const options = ['rock', 'paper', 'scissor'];
@@ -125,14 +153,11 @@ const getRandomInt = () => Math.floor(Math.random() * 3);
 
 const compare = (player, computerChoice) => {
   const computer = computerChoice;
-  console.log('computer-->', computer);
-  console.log('text-->', opts[computer]);
-  if (opts && opts[player].text) {
-    if (opts[player].text === computer) {
-      return 1;
-    } else if (opts[computer].text === player) {
-      return 2;
-    }
+
+  if (opts[player].beats === computer) {
+    return 'player';
+  } else if (opts[computer].beats === player) {
+    return 'computer';
   }
 
   return 0;
